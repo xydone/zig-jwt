@@ -1,5 +1,6 @@
 .{
-    .name = "jwt",
+    .name = .jwt,
+    .fingerprint = 0x8d17cdf07e2c9836,
     .version = "0.1.0",
     .minimum_zig_version = "0.13.0",
     .dependencies = .{
