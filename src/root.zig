@@ -1,6 +1,7 @@
 const std = @import("std");
 
 pub const decode = @import("decode.zig").decode;
+pub const decodeNoVerify = @import("decode.zig").decodeNoVerify;
 pub const DecodingKey = @import("decode.zig").DecodingKey;
 pub const Validation = @import("validation.zig").Validation;
 pub const encode = @import("encode.zig").encode;

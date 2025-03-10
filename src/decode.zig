@@ -65,6 +65,37 @@ pub fn decode(
     return error.MalformedJWT;
 }
 
+pub fn decodeNoVerify(
+    allocator: std.mem.Allocator,
+    comptime ClaimSet: type,
+    str: []const u8,
+) !JWT(ClaimSet) {
+    var arena = try allocator.create(std.heap.ArenaAllocator);
+    arena.* = std.heap.ArenaAllocator.init(allocator);
+    errdefer {
+        arena.deinit();
+        allocator.destroy(arena);
+    }
+    if (std.mem.count(u8, str, ".") == 2) {
+        const sigSplit = std.mem.lastIndexOfScalar(u8, str, '.').?;
+        const messageEnc = .{str[0..sigSplit]};
+
+        const header = try decodePart(arena.allocator(), Header, messageEnc[0..std.mem.indexOfScalar(u8, messageEnc, '.').?]);
+        const claims = try decodePart(
+            allocator,
+            ClaimSet,
+            messageEnc[std.mem.indexOfScalar(u8, messageEnc, '.').? + 1 ..],
+        );
+
+        return .{
+            .arena = arena,
+            .header = header,
+            .claims = claims,
+        };
+    }
+    return error.MalformedJWT;
+}
+
 pub fn verify(
     allocator: std.mem.Allocator,
     algo: Algorithm,
