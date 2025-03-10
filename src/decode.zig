@@ -78,7 +78,7 @@ pub fn decodeNoVerify(
     }
     if (std.mem.count(u8, str, ".") == 2) {
         const sigSplit = std.mem.lastIndexOfScalar(u8, str, '.').?;
-        const messageEnc = .{str[0..sigSplit]};
+        const messageEnc = str[0..sigSplit];
 
         const header = try decodePart(arena.allocator(), Header, messageEnc[0..std.mem.indexOfScalar(u8, messageEnc, '.').?]);
         const claims = try decodePart(
