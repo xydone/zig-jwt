@@ -117,6 +117,9 @@ pub fn verify(
                 .secret => |v| v,
                 else => return error.InvalidDecodingKey,
             });
+            if (src.len != sig.len) {
+                return error.InvalidSignature;
+            }
             @memcpy(&src, sig);
             if (!std.crypto.utils.timingSafeEql([dest.len]u8, src, dest)) {
                 return error.InvalidSignature;
@@ -129,6 +132,9 @@ pub fn verify(
                 .secret => |v| v,
                 else => return error.InvalidDecodingKey,
             });
+            if (src.len != sig.len) {
+                return error.InvalidSignature;
+            }
             @memcpy(&src, sig);
             if (!std.crypto.utils.timingSafeEql([dest.len]u8, src, dest)) {
                 return error.InvalidSignature;
@@ -141,6 +147,9 @@ pub fn verify(
                 .secret => |v| v,
                 else => return error.InvalidDecodingKey,
             });
+            if (src.len != sig.len) {
+                return error.InvalidSignature;
+            }
             @memcpy(&src, sig);
             if (!std.crypto.utils.timingSafeEql([dest.len]u8, src, dest)) {
                 return error.InvalidSignature;
@@ -148,6 +157,9 @@ pub fn verify(
         },
         .ES256 => {
             var src: [std.crypto.sign.ecdsa.EcdsaP256Sha256.Signature.encoded_length]u8 = undefined;
+            if (src.len != sig.len) {
+                return error.InvalidSignature;
+            }
             @memcpy(&src, sig);
             std.crypto.sign.ecdsa.EcdsaP256Sha256.Signature.fromBytes(src).verify(msg, switch (key) {
                 .es256 => |v| v,
@@ -158,6 +170,9 @@ pub fn verify(
         },
         .ES384 => {
             var src: [std.crypto.sign.ecdsa.EcdsaP384Sha384.Signature.encoded_length]u8 = undefined;
+            if (src.len != sig.len) {
+                return error.InvalidSignature;
+            }
             @memcpy(&src, sig);
             std.crypto.sign.ecdsa.EcdsaP384Sha384.Signature.fromBytes(src).verify(msg, switch (key) {
                 .es384 => |v| v,
@@ -178,6 +193,9 @@ pub fn verify(
         // },
         .EdDSA => {
             var src: [std.crypto.sign.Ed25519.Signature.encoded_length]u8 = undefined;
+            if (src.len != sig.len) {
+                return error.InvalidSignature;
+            }
             @memcpy(&src, sig);
             std.crypto.sign.Ed25519.Signature.fromBytes(src).verify(msg, switch (key) {
                 .edsa => |v| v,
