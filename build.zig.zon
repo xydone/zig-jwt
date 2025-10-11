@@ -2,12 +2,12 @@
     .name = .jwt,
     .fingerprint = 0x8d17cdf07e2c9836,
     .version = "0.1.0",
-    .minimum_zig_version = "0.13.0",
+    .minimum_zig_version = "0.15.1",
     .dependencies = .{
-        // todo: update this to a versioned tag when this package publishes one
+        //TODO: go back to upstream, depends on https://github.com/silversquirl/benchmark.zig/pull/2
         .benchmark = .{
-            .url = "https://github.com/silversquirl/benchmark.zig/archive/refs/heads/main/main.tar.gz",
-            .hash = "1220287c22cfcf85f05d353084e12200c6a7dcb5f4511cb05103f5dbd709e50731a7",
+            .url = "git+https://github.com/xydone/benchmark.zig?ref=0.15.1#eb43168ccb9afd5c951faf6689aa4e1575d65124",
+            .hash = "benchmark-0.1.0-5BzpxD8hAACczJTrpg_zL5TffXBLvlJLo0-HTQ1rN7dO",
         },
     },
     .paths = .{

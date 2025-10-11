@@ -121,7 +121,7 @@ pub fn verify(
                 return error.InvalidSignature;
             }
             @memcpy(&src, sig);
-            if (!std.crypto.utils.timingSafeEql([dest.len]u8, src, dest)) {
+            if (!std.crypto.timing_safe.eql([dest.len]u8, src, dest)) {
                 return error.InvalidSignature;
             }
         },
@@ -136,7 +136,7 @@ pub fn verify(
                 return error.InvalidSignature;
             }
             @memcpy(&src, sig);
-            if (!std.crypto.utils.timingSafeEql([dest.len]u8, src, dest)) {
+            if (!std.crypto.timing_safe.eql([dest.len]u8, src, dest)) {
                 return error.InvalidSignature;
             }
         },
@@ -151,7 +151,7 @@ pub fn verify(
                 return error.InvalidSignature;
             }
             @memcpy(&src, sig);
-            if (!std.crypto.utils.timingSafeEql([dest.len]u8, src, dest)) {
+            if (!std.crypto.timing_safe.eql([dest.len]u8, src, dest)) {
                 return error.InvalidSignature;
             }
         },

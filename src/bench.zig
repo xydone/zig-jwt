@@ -3,12 +3,11 @@ const jwt = @import("root.zig");
 
 const benchmark = @import("benchmark");
 
-// bench hello world comparison
-test "bench decode" {
+pub fn main() !void {
     try benchmark.main(.{}, struct {
         pub fn benchDecode(b: *benchmark.B) !void {
             // Setup is not timed
-            var arena = std.heap.ArenaAllocator.init(std.testing.allocator);
+            var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
             defer arena.deinit();
 
             const token = try jwt.encode(arena.allocator(), .{ .alg = .HS256 }, .{ .sub = "test", .exp = @divTrunc(std.time.milliTimestamp(), 1000) * 10 }, .{ .secret = "secret" });
@@ -28,12 +27,7 @@ test "bench decode" {
                 b.use(decoded);
             }
         }
-    })();
-}
 
-test "bench encode" {
-    try benchmark.main(.{}, struct {
-        // Benchmarks are just public functions
         pub fn benchEncode(b: *benchmark.B) !void {
             // Setup is not timed
             var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);

@@ -28,8 +28,14 @@ fn encodePart(
     part: anytype,
 ) ![]const u8 {
     const encoder = std.base64.url_safe_no_pad.Encoder;
-    const json = try std.json.stringifyAlloc(allocator, part, .{ .emit_null_optional_fields = false });
+    const fmt = std.json.fmt(part, .{ .emit_null_optional_fields = false });
+
+    var writer = std.Io.Writer.Allocating.init(allocator);
+    try fmt.format(&writer.writer);
+
+    const json = try writer.toOwnedSlice();
     defer allocator.free(json);
+
     const enc = try allocator.alloc(u8, encoder.calcSize(json.len));
     _ = encoder.encode(enc, json);
     return enc;
@@ -123,11 +129,11 @@ pub fn encode(
     defer allocator.free(sig_enc);
     _ = encoder.encode(sig_enc, sig);
 
-    var buf = std.ArrayList(u8).init(allocator);
-    defer buf.deinit();
-    try buf.appendSlice(msg);
-    try buf.append('.');
-    try buf.appendSlice(sig_enc);
+    var buf: std.ArrayList(u8) = .empty;
+    defer buf.deinit(allocator);
+    try buf.appendSlice(allocator, msg);
+    try buf.append(allocator, '.');
+    try buf.appendSlice(allocator, sig_enc);
 
-    return try buf.toOwnedSlice();
+    return try buf.toOwnedSlice(allocator);
 }

@@ -119,6 +119,10 @@ const TestES256Data = struct {
     }
 };
 
+test {
+    _ = @import("bench.zig");
+}
+
 test "ES256.roundtrip" {
     const allocator = std.testing.allocator;
     const data = try TestES256Data.init(allocator);
